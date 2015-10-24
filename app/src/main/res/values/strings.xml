@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MeLotto</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="cheese_ipsum">Jarlsberg lancashire edam. Dolcelatte hard cheese brie st. agur blue
+    cheese caerphilly bavarian bergkase cheese and biscuits mascarpone. Cheeseburger swiss bavarian
+    bergkase cream cheese fromage frais cheesy feet port-salut airedale. St. agur blue cheese rubber
+    cheese caerphilly cheddar cheesecake cream cheese manchego lancashire. Roquefort squirty cheese
+    the big cheese.</string>
+    <string name="checkin">Checkin</string>
+    <string name="menu_settings">Settings</string>
+
+    <string name="parse_app_id">ppY8Kc8OYaa0r26Fqn3hKykvYfFgLq7OOOWOh4nR</string>
+    <string name="parse_client_key">iKP5kw86DfZ7W2V3Qxf00RRYemUqOoFuBXPueAb7</string>
+
+    <string name="profile_logo_content_description">Logo</string>
+    <string name="profile_title_logged_in">Your are logged in as</string>
+    <string name="profile_logout_button_label">Log out</string>
+    <string name="profile_title_logged_out">You must be logged in to view your profile</string>
+    <string name="profile_login_button_label">Log in</string>
+
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="lotto_prompt">Enter your lotto numbers</string>
+
+    <string name="logoff">Logoff</string>
+
+    <string name="lotto_state_prompt">State</string>
+    <string-array name="lotto_state_array">
+        <item>CA</item>
+        <item>TX</item>
+    </string-array>
+
+    <string name="lotto_name_prompt">Lottery</string>
+    <string-array name="lotto_ca_array">
+        <item>PowerBall</item>
+        <item>SuperLotto</item>
+    </string-array>
+
+</resources>
