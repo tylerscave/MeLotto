@@ -127,6 +127,35 @@
                             android:maxLength="2">
                         </EditText>
                     </LinearLayout>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/linearLayout">
+                    </LinearLayout>
+                    <!--<LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textFieldLayout">
+                    </LinearLayout>-->
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <Button
+                            android:id="@+id/addButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Add+"
+                            />
+                        <Button
+                            android:id="@+id/deleteButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Subtract-"
+                            />
+                    </LinearLayout>
                     <Button
                         android:id="@+id/saveButton"
                         android:layout_width="fill_parent"
@@ -136,6 +165,23 @@
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
+
+            <!--<android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/card_margin">
+                <LinearLayout
+                    style="@style/Widget.CardContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <EditText
+                        android:id="@+id/editText"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>-->
 
 
         </LinearLayout>

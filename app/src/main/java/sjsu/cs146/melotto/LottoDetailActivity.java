@@ -1,14 +1,19 @@
 package sjsu.cs146.melotto;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,7 +27,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -30,6 +37,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 public class LottoDetailActivity extends AppCompatActivity implements OnClickListener{
 
@@ -52,6 +60,15 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
     private LottoTicket lottoTicket;
     private String lottoId = null;
     private byte[] bytearray;
+
+    private ViewGroup vg;
+    private LinearLayout mLayout;
+    private LinearLayout mLayout2;
+    private EditText mEditText;
+    private Button dButton;
+    private Button aButton;
+
+    private int countViews;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,6 +126,17 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCam);
         fab.setOnClickListener(this);
+        //vg = (ViewGroup) findViewById(R.id.linearLayout);
+        mLayout = (LinearLayout) findViewById(R.id.linearLayout);
+        //mLayout2 = (LinearLayout) findViewById(R.id.textFieldLayout);
+        //mEditText = (EditText) findViewById(R.id.editText);
+        aButton = (Button) findViewById(R.id.addButton);
+        aButton.setOnClickListener(this);
+        dButton = (Button) findViewById(R.id.deleteButton);
+        dButton.setOnClickListener(this);
+        TextView textView = new TextView(this);
+        textView.setText("  ");
+        countViews = 0;
     }
     private class SpinnerItemSelectedListener implements AdapterView.OnItemSelectedListener {
         @Override
@@ -127,6 +155,7 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
         switch (view.getId()) {
             case R.id.saveButton:
                 ParseObject lottoTicket = new ParseObject("test");
+
                 lottoTicket.put("B1", b1.getText().toString());
                 lottoTicket.put("B2", b2.getText().toString());
                 lottoTicket.put("B3", b3.getText().toString());
@@ -140,13 +169,28 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                     imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     // get byte array here
                     bytearray = stream.toByteArray();
-                   // if (bytearray != null) {
-                        ParseFile file = new ParseFile("picture.jpg", bytearray);
-                        file.saveInBackground();
-                        lottoTicket.put("profilepic", file);
-                   // }
+                    // if (bytearray != null) {
+                    ParseFile file = new ParseFile("picture.jpg", bytearray);
+                    file.saveInBackground();
+                    lottoTicket.put("profilepic", file);
+                    // }
                 }
                 lottoTicket.saveInBackground();
+                break;
+            case R.id.addButton:
+                //vg.addView(createNewLayout());
+                //createNewLayout();
+                //mLayout2.addView(new EditText(this));
+                LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View view2 = inflater.inflate(R.layout.test, mLayout, false);
+                mLayout.addView(view2);
+                countViews++;
+                break;
+            case R.id.deleteButton:
+                if(countViews!=0){
+                    mLayout.removeViewAt(0);
+                    countViews--;
+                }
                 break;
             case R.id.fabCam:
                 dispatchTakePictureIntent();
@@ -155,6 +199,21 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                 alertDatePicker();
         }
     }
+    /*private LinearLayout createNewLayout(){
+        mLayout2.addView(createNewTextView(mEditText.getText().toString()));
+        //mLayout2.addView(createNewTextView(mEditText.getText().toString()));
+        return mLayout2;
+    }
+        private EditText createNewTextView(String text) {
+            final LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            final EditText editText = new EditText(this);
+            editText.setLayoutParams(lparams);
+            editText.setLines(1);
+            final int maxLength = 2;
+            editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
+            editText.setText("-" + text);
+            return editText;
+        }*/
     //private ImageView imageView;
     private void loadBackdrop() {
         imageView = (ImageView) findViewById(R.id.backdrop);
