@@ -60,6 +60,9 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
     private LottoTicket lottoTicket;
     private String lottoId = null;
     private byte[] bytearray;
+    private int day;
+    private int month;
+    private int year;
 
     private ViewGroup vg;
     private LinearLayout mLayout;
@@ -162,6 +165,7 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                 lottoTicket.put("B4", b4.getText().toString());
                 lottoTicket.put("B5", b5.getText().toString());
                 lottoTicket.put("PB", pb.getText().toString());
+
                 //lottoTicket.saveInBackground();
                 Toast.makeText(getApplicationContext(), "saved", Toast.LENGTH_LONG).show();
                 if(imageBitmap!=null) {
@@ -175,6 +179,10 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                     lottoTicket.put("profilepic", file);
                     // }
                 }
+                lottoTicket.put("DAY", day);
+                lottoTicket.put("MONTH", month);
+                lottoTicket.put("YEAR", year);
+                lottoTicket.saveInBackground();
                 lottoTicket.saveInBackground();
                 break;
             case R.id.addButton:
@@ -188,7 +196,7 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                 break;
             case R.id.deleteButton:
                 if(countViews!=0){
-                    mLayout.removeViewAt(0);
+                    mLayout.removeViewAt(mLayout.getChildCount()-1);
                     countViews--;
                 }
                 break;
@@ -277,14 +285,14 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                      * have to add 1 for getting correct month.
                      * http://goo.gl/9ywsj
                      */
-                        int month = myDatePicker.getMonth() + 1;
-                        int day = myDatePicker.getDayOfMonth();
-                        int year = myDatePicker.getYear();
+                        month = myDatePicker.getMonth() + 1;
+                        day = myDatePicker.getDayOfMonth();
+                        year = myDatePicker.getYear();
 
 
                         Toast.makeText(getApplicationContext(), month + "/" + day + "/" + year, Toast.LENGTH_LONG).show();
                         //showToast(month + "/" + day + "/" + year);
-
+                        pickDateButton.setText(month + "/" + day + "/" + year);
                         dialog.cancel();
 
                     }
