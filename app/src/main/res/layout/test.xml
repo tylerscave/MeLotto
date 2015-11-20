@@ -10,37 +10,67 @@
         android:id="@+id/B1"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:maxLength="2">
+        android:maxLength="2"
+        android:layout_weight="1"
+        android:inputType="number"
+        android:layout_marginRight="4dp"
+        android:nextFocusRight="@+id/B2"
+        android:imeOptions="actionNext">
     </EditText>
     <EditText
         android:id="@+id/B2"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:maxLength="2">
+        android:maxLength="2"
+        android:layout_weight="1"
+        android:inputType="number"
+        android:layout_marginRight="4dp"
+        android:nextFocusRight="@+id/B3"
+        android:imeOptions="actionNext">
     </EditText>
     <EditText
         android:id="@+id/B3"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:maxLength="2">
+        android:maxLength="2"
+        android:layout_weight="1"
+        android:inputType="number"
+        android:layout_marginRight="4dp"
+        android:nextFocusRight="@+id/B4"
+        android:imeOptions="actionNext">
     </EditText>
     <EditText
         android:id="@+id/B4"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:maxLength="2">
+        android:maxLength="2"
+        android:layout_weight="1"
+        android:inputType="number"
+        android:layout_marginRight="4dp"
+        android:nextFocusRight="@+id/B5"
+        android:imeOptions="actionNext">
     </EditText>
     <EditText
         android:id="@+id/B5"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:maxLength="2">
+        android:maxLength="2"
+        android:layout_weight="1"
+        android:inputType="number"
+        android:layout_marginRight="4dp"
+        android:nextFocusRight="@+id/PB"
+        android:imeOptions="actionNext">
     </EditText>
     <EditText
         android:id="@+id/PB"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:maxLength="2">
+        android:maxLength="2"
+        android:layout_weight="1"
+        android:inputType="number"
+        android:layout_marginRight="4dp"
+        android:nextFocusDown="@+id/B1"
+        android:imeOptions="actionNext">
     </EditText>
 
 </LinearLayout>
