@@ -33,7 +33,7 @@ import java.util.List;
 
 public class LottoNewListFragment extends Fragment {
     private List<String> list = new ArrayList<>();
-   // private static List<ParseFile> pics = new ArrayList<>();
+    private static List<ParseFile> pics = new ArrayList<>();
 
     @Nullable
     @Override
@@ -66,7 +66,7 @@ public class LottoNewListFragment extends Fragment {
             public void done(List<ParseObject> query, ParseException e) {
                 if (e == null) {
                     for (ParseObject po : query) {
-                        //pics.add(po.getParseFile("profilepic"));
+                        pics.add(po.getParseFile("profilepic"));
                         list.add(po.getString("B1") + " " + po.getString("B2") + " " + po.getString("B3") +
                                 " " + po.getString("B4") + " " + po.getString("B5") + " " + po.getString("PB") +
                                 " date " + po.getInt("MONTH") + "/" + po.getInt("DAY") + "/" + po.getInt("YEAR"));
@@ -154,11 +154,9 @@ public class LottoNewListFragment extends Fragment {
             });
 
             Glide.with(holder.mImageView.getContext())
-             .load(Cheeses.getRandomCheeseDrawable())
-                 //.load(pics.get(0))
+             .load(pics.get(0).getUrl())
                  .fitCenter()
                  .into(holder.mImageView);
-
         }
 
         @Override
