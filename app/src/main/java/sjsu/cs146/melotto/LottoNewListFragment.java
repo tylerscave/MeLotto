@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,7 +19,6 @@ import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseImageView;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -58,10 +56,10 @@ public class LottoNewListFragment extends Fragment {
         int month = now.get(Calendar.MONTH) + 1; // Note: zero based!
         int day = now.get(Calendar.DAY_OF_MONTH);
         ParseQuery<ParseObject> query = ParseQuery.getQuery("test");
+        query.selectKeys(keys);
         query.whereGreaterThanOrEqualTo("YEAR", year);
         query.whereGreaterThanOrEqualTo("MONTH", month);
         query.whereGreaterThanOrEqualTo("DAY", day);
-        query.selectKeys(keys);
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> query, ParseException e) {
                 if (e == null) {
@@ -88,6 +86,7 @@ public class LottoNewListFragment extends Fragment {
         hs.addAll(list);
         list.clear();
         list.addAll(hs);
+        System.out.println("New List has " + list.size() + " elements");
         return list;
     }
 
@@ -103,14 +102,12 @@ public class LottoNewListFragment extends Fragment {
 
             public final View mView;
             public final ImageView mImageView;
-            //public final ParseImageView mImageView;
             public final TextView mTextView;
 
-            public ViewHolder(View view) {
+            private ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mImageView = (ImageView) view.findViewById(R.id.avatar);
-                //mImageView = (ParseImageView) view.findViewById(R.id.avatar);
                 mTextView = (TextView) view.findViewById(android.R.id.text1);
             }
 
@@ -124,7 +121,7 @@ public class LottoNewListFragment extends Fragment {
             return mValues.get(position);
         }
 
-        public SimpleStringRecyclerViewAdapter(Context context, List<String> items) {
+        private SimpleStringRecyclerViewAdapter(Context context, List<String> items) {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
             mValues = items;
@@ -154,7 +151,7 @@ public class LottoNewListFragment extends Fragment {
             });
 
             Glide.with(holder.mImageView.getContext())
-             .load(pics.get(0).getUrl())
+             .load(pics.get(position).getUrl())
                  .fitCenter()
                  .into(holder.mImageView);
         }

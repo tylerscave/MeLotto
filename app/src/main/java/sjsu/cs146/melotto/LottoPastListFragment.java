@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -30,6 +30,7 @@ import java.util.List;
 
 public class LottoPastListFragment extends Fragment {
     private List<String> list = new ArrayList<>();
+    private static List<ParseFile> pics = new ArrayList<>();
 
     @Nullable
     @Override
@@ -47,20 +48,21 @@ public class LottoPastListFragment extends Fragment {
     }
 
     private List<String> getPastList() {
-        List<String> keys = Arrays.asList("B1", "B2", "B3", "B4", "B5", "PB", "MONTH", "DAY", "YEAR");
+        List<String> keys = Arrays.asList("B1", "B2", "B3", "B4", "B5", "PB", "MONTH", "DAY", "YEAR", "profilepic");
         Calendar now = Calendar.getInstance();
         int year = now.get(Calendar.YEAR);
         int month = now.get(Calendar.MONTH) + 1; // Note: zero based!
         int day = now.get(Calendar.DAY_OF_MONTH);
         ParseQuery<ParseObject> query = ParseQuery.getQuery("test");
+        query.selectKeys(keys);
         query.whereLessThanOrEqualTo("YEAR", year);
         query.whereLessThanOrEqualTo("MONTH", month);
         query.whereLessThan("DAY", day);
-        query.selectKeys(keys);
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> query, ParseException e) {
                 if (e == null) {
                     for (ParseObject po : query) {
+                        pics.add(po.getParseFile("profilepic"));
                         list.add(po.getString("B1") + " " + po.getString("B2") + " " + po.getString("B3") +
                                 " " + po.getString("B4") + " " + po.getString("B5") + " " + po.getString("PB") +
                                 " date " + po.getInt("MONTH") + "/" + po.getInt("DAY") + "/" + po.getInt("YEAR"));
@@ -82,10 +84,11 @@ public class LottoPastListFragment extends Fragment {
         hs.addAll(list);
         list.clear();
         list.addAll(hs);
+        System.out.println("Past List has " + list.size() + " elements");
         return list;
     }
 
-    public static class SimpleStringRecyclerViewAdapter
+    private static class SimpleStringRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
 
         private final TypedValue mTypedValue = new TypedValue();
@@ -99,7 +102,7 @@ public class LottoPastListFragment extends Fragment {
             public final ImageView mImageView;
             public final TextView mTextView;
 
-            public ViewHolder(View view) {
+            private ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mImageView = (ImageView) view.findViewById(R.id.avatar);
@@ -116,7 +119,7 @@ public class LottoPastListFragment extends Fragment {
             return mValues.get(position);
         }
 
-        public SimpleStringRecyclerViewAdapter(Context context, List<String> items) {
+        private SimpleStringRecyclerViewAdapter(Context context, List<String> items) {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
             mValues = items;
@@ -146,7 +149,7 @@ public class LottoPastListFragment extends Fragment {
             });
 
             Glide.with(holder.mImageView.getContext())
-                    .load(Cheeses.getRandomCheeseDrawable())
+                    .load(pics.get(position).getUrl())
                     .fitCenter()
                     .into(holder.mImageView);
         }
