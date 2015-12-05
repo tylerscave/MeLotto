@@ -30,8 +30,14 @@ import java.util.List;
 
 
 public class LottoNewListFragment extends Fragment {
-    private List<String> list = new ArrayList<>();
+    private static List<String> list = new ArrayList<>();
     private static List<ParseFile> pics = new ArrayList<>();
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getNewList();
+    }
 
     @Nullable
     @Override
@@ -39,6 +45,7 @@ public class LottoNewListFragment extends Fragment {
         RecyclerView rv = (RecyclerView) inflater.inflate(
                 R.layout.fragment_new_list, container, false);
         setupRecyclerView(rv);
+        getNewList();
         return rv;
     }
 
@@ -46,10 +53,10 @@ public class LottoNewListFragment extends Fragment {
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                getNewList()));
+                list));
     }
 
-    private List<String> getNewList() {
+    public static void getNewList() {
         List<String> keys = Arrays.asList("B1", "B2", "B3", "B4", "B5", "PB", "MONTH", "DAY", "YEAR", "profilepic");
         Calendar now = Calendar.getInstance();
         int year = now.get(Calendar.YEAR);
@@ -86,8 +93,7 @@ public class LottoNewListFragment extends Fragment {
         hs.addAll(list);
         list.clear();
         list.addAll(hs);
-        System.out.println("New List has " + list.size() + " elements");
-        return list;
+        //System.out.println("New List has " + list.size() + " elements");
     }
 
     public static class SimpleStringRecyclerViewAdapter

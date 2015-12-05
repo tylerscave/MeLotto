@@ -93,6 +93,8 @@ public class LottoActivity extends AppCompatActivity {
         adapter.addFragment(new LottoPastListFragment(), "Past Tickets");
         adapter.addFragment(new LottoPrintListFragment(), "Print Report");
         viewPager.setAdapter(adapter);
+        LottoNewListFragment.getNewList();
+        LottoPastListFragment.getPastList();
     }
 
     static class Adapter extends FragmentPagerAdapter {

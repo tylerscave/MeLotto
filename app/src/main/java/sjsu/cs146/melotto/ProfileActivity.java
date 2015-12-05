@@ -1,6 +1,7 @@
 package sjsu.cs146.melotto;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,8 +11,6 @@ import android.widget.TextView;
 import com.parse.ParseACL;
 import com.parse.ParseUser;
 import com.parse.ui.ParseLoginBuilder;
-
-import android.content.Intent;
 
 /**
  * Shows the user profile. This simple activity can function regardless of whether the user
@@ -24,7 +23,6 @@ public class ProfileActivity extends Activity {
     private TextView emailTextView;
     private TextView nameTextView;
     private Button loginOrLogoutButton;
-
     private ParseUser currentUser;
 
     @Override
@@ -63,6 +61,8 @@ public class ProfileActivity extends Activity {
         currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
             showProfileLoggedIn();
+            // make user login if app has been closed
+            ParseUser.logOut();
         } else {
             showProfileLoggedOut();
         }
