@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 
@@ -32,66 +25,31 @@ public class LottoPastListFragment extends Fragment {
     private static List<String> list = new ArrayList<>();
     private static List<ParseFile> pics = new ArrayList<>();
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getPastList();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RecyclerView rv = (RecyclerView) inflater.inflate(
                 R.layout.fragment_past_list, container, false);
         setupRecyclerView(rv);
-        getPastList();
         return rv;
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                list));
+                setPastTickets(LottoTicket.getPastList())));
     }
 
-    public static void getPastList() {
-        List<String> keys = Arrays.asList("B1", "B2", "B3", "B4", "B5", "PB", "MONTH", "DAY", "YEAR", "profilepic");
-        Calendar now = Calendar.getInstance();
-        int year = now.get(Calendar.YEAR);
-        int month = now.get(Calendar.MONTH) + 1; // Note: zero based!
-        int day = now.get(Calendar.DAY_OF_MONTH);
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("test");
-        query.selectKeys(keys);
-        query.whereLessThanOrEqualTo("YEAR", year);
-        query.whereLessThanOrEqualTo("MONTH", month);
-        query.whereLessThan("DAY", day);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> query, ParseException e) {
-                if (e == null) {
-                    for (ParseObject po : query) {
-                        pics.add(po.getParseFile("profilepic"));
-                        list.add(po.getString("B1") + " " + po.getString("B2") + " " + po.getString("B3") +
-                                " " + po.getString("B4") + " " + po.getString("B5") + " " + po.getString("PB") +
-                                " date " + po.getInt("MONTH") + "/" + po.getInt("DAY") + "/" + po.getInt("YEAR"));
-                    }
-                } else {
-                    Log.d("B1", "Error: " + e.getMessage());
-                    Log.d("B2", "Error: " + e.getMessage());
-                    Log.d("B3", "Error: " + e.getMessage());
-                    Log.d("B4", "Error: " + e.getMessage());
-                    Log.d("B5", "Error: " + e.getMessage());
-                    Log.d("PB", "Error: " + e.getMessage());
-                    Log.d("MONTH", "Error: " + e.getMessage());
-                    Log.d("DAY", "Error: " + e.getMessage());
-                    Log.d("YEAR", "Error: " + e.getMessage());
-                }
-            }
-        });
+    public static List<String> setPastTickets(List<LottoTicket> tickets){
+        for (LottoTicket ticket : tickets){
+            list.add(ticket.getNums());
+            pics.add(ticket.getPic());
+        }
         HashSet<String> hs = new HashSet<>();
         hs.addAll(list);
         list.clear();
         list.addAll(hs);
-        //System.out.println("Past List has " + list.size() + " elements");
+        return list;
     }
 
     private static class SimpleStringRecyclerViewAdapter
@@ -140,7 +98,7 @@ public class LottoPastListFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mBoundString = mValues.get(position);
             holder.mTextView.setText(mValues.get(position));
 
@@ -151,6 +109,7 @@ public class LottoPastListFragment extends Fragment {
                     Intent intent = new Intent(context, LottoDetailActivity.class);
                     intent.putExtra(LottoDetailActivity.EXTRA_NAME, holder.mBoundString);
                     context.startActivity(intent);
+                    LottoDetailActivity.setPicUrl(pics.get(position).getUrl());
                 }
             });
 

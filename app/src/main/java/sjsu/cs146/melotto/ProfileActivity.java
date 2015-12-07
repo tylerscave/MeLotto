@@ -28,7 +28,6 @@ public class ProfileActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_profile);
         titleTextView = (TextView) findViewById(R.id.profile_title);
         emailTextView = (TextView) findViewById(R.id.profile_email);
@@ -61,8 +60,6 @@ public class ProfileActivity extends Activity {
         currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
             showProfileLoggedIn();
-            // make user login if app has been closed
-            ParseUser.logOut();
         } else {
             showProfileLoggedOut();
         }

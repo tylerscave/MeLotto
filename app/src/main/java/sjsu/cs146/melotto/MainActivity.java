@@ -11,9 +11,6 @@ public class MainActivity extends Application {
         super.onCreate();
         // Required - Initialize the Parse SDK
         Parse.initialize(this);
-
         Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
-
-
     }
 }

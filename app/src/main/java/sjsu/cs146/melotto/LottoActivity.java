@@ -30,6 +30,16 @@ public class LottoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lotto);
 
+        // instantiate LottoTicket to query parse before fragments load
+        new LottoTicket();
+
+        // adding a delay to allow parse query to complete before app continues
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -93,8 +103,6 @@ public class LottoActivity extends AppCompatActivity {
         adapter.addFragment(new LottoPastListFragment(), "Past Tickets");
         adapter.addFragment(new LottoPrintListFragment(), "Print Report");
         viewPager.setAdapter(adapter);
-        LottoNewListFragment.getNewList();
-        LottoPastListFragment.getPastList();
     }
 
     static class Adapter extends FragmentPagerAdapter {
