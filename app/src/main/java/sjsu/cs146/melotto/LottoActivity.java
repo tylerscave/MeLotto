@@ -35,7 +35,7 @@ public class LottoActivity extends AppCompatActivity {
 
         // adding a delay to allow parse query to complete before app continues
         try {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
