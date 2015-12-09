@@ -15,13 +15,127 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.parse.ParseFile;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 
 public class LottoPrintListFragment extends Fragment {
 
+    private static List<String> list = new ArrayList<>();
+    private static List<ParseFile> pics = new ArrayList<>();
+
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        RecyclerView rv = (RecyclerView) inflater.inflate(
+                R.layout.fragment_print_list, container, false);
+        setupRecyclerView(rv);
+        return rv;
+    }
+
+
+    private void setupRecyclerView(RecyclerView recyclerView) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
+                setAllTickets(LottoTicket.getAllList())));
+    }
+
+    public static List<String> setAllTickets(List<LottoTicket> tickets){
+        for (LottoTicket ticket : tickets){
+            list.add(ticket.getNums());
+            pics.add(ticket.getPic());
+        }
+        HashSet<String> hs = new HashSet<>();
+        hs.addAll(list);
+        list.clear();
+        list.addAll(hs);
+        return list;
+    }
+
+    public static class SimpleStringRecyclerViewAdapter
+            extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
+
+        private final TypedValue mTypedValue = new TypedValue();
+        private int mBackground;
+        private List<String> mValues;
+
+        public static class ViewHolder extends RecyclerView.ViewHolder {
+            public String mBoundString;
+
+            public final View mView;
+            public final ImageView mImageView;
+            public final TextView mTextView;
+
+            private ViewHolder(View view) {
+                super(view);
+                mView = view;
+                mImageView = (ImageView) view.findViewById(R.id.avatar);
+                mTextView = (TextView) view.findViewById(android.R.id.text1);
+            }
+
+            @Override
+            public String toString() {
+                return super.toString() + " '" + mTextView.getText();
+            }
+        }
+
+        public String getValueAt(int position) {
+            return mValues.get(position);
+        }
+
+        private SimpleStringRecyclerViewAdapter(Context context, List<String> items) {
+            context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
+            mBackground = mTypedValue.resourceId;
+            mValues = items;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.list_item, parent, false);
+            view.setBackgroundResource(mBackground);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
+            holder.mBoundString = mValues.get(position);
+            holder.mTextView.setText(mValues.get(position));
+
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, LottoDetailActivity.class);
+                    intent.putExtra(LottoDetailActivity.EXTRA_NAME, holder.mBoundString);
+                    context.startActivity(intent);
+                    LottoDetailActivity.setPicUrl(pics.get(position).getUrl());
+                }
+            });
+            Glide.with(holder.mImageView.getContext())
+                    .load(pics.get(position).getUrl())
+                    .fitCenter()
+                    .into(holder.mImageView);
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return mValues.size();
+        }
+    }
+}
+
+
+
+
+
+
+ /*
+ OLD CHEESE STUFF FOR REFERENCE ---> DELETE LATER
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -119,3 +233,4 @@ public class LottoPrintListFragment extends Fragment {
         }
     }
 }
+ */

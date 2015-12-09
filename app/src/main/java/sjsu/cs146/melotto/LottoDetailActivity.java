@@ -219,10 +219,9 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
     //private ImageView imageView;
     private void loadBackdrop() {
         imageView = (ImageView) findViewById(R.id.backdrop);
-        //Glide.with(this).load(Cheeses.getRandomCheeseDrawable()).centerCrop().into(imageView);
-        // need to fix this to display photo of ticket when clicked on
         Glide.with(this).load(picUrl).fitCenter().into(imageView);
     }
+
     // method and variable to set the backdrop image above
     private static String picUrl;
     public static void setPicUrl(String pic){

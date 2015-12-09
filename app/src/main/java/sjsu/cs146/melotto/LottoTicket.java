@@ -24,7 +24,7 @@ public class LottoTicket {
     public LottoTicket(){
         getNewTickets();
         getPastTickets();
-        //getAllTickets();
+        getAllTickets();
     }
 
     public LottoTicket(String nums, ParseFile pic) {
@@ -47,6 +47,8 @@ public class LottoTicket {
     public static List<LottoTicket> getPastList(){
         return pastTickets;
     }
+
+    public static List<LottoTicket> getAllList() {return allTickets; }
 
     public static void getNewTickets() {
         List<String> keys = Arrays.asList("B1", "B2", "B3", "B4", "B5", "PB", "MONTH", "DAY", "YEAR", "profilepic");
@@ -149,7 +151,7 @@ public class LottoTicket {
                     Log.d("DAY", "Error: " + e.getMessage());
                     Log.d("YEAR", "Error: " + e.getMessage());
                 }
-                //LottoPastListFragment.setAllTickets(allTickets);
+                LottoPrintListFragment.setAllTickets(allTickets);
             }
         });
     }
