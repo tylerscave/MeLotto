@@ -8,9 +8,11 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class LottoTicket {
@@ -65,9 +67,19 @@ public class LottoTicket {
                 if (e == null) {
                     for (ParseObject po : query) {
                         ParseFile thisPic = po.getParseFile("profilepic");
+                        Integer ticketDate = po.getInt("DATE");
+                        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd");
+                        Date aDate = null;
+                        try {
+                            aDate = originalFormat.parse(ticketDate.toString());
+                        } catch (java.text.ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                        SimpleDateFormat newFormat = new SimpleDateFormat("MM/dd/yyyy");
+                        String formatedDate = newFormat.format(aDate);
                         String thisTicket = (po.getString("B1") + " " + po.getString("B2") + " " + po.getString("B3") +
                                 " " + po.getString("B4") + " " + po.getString("B5") + " " + po.getString("PB") +
-                                " date " + po.getInt("DATE") );
+                                " date " + formatedDate);
                         newTickets.add(new LottoTicket(thisTicket, thisPic));
                     }
                 }else{
@@ -90,7 +102,7 @@ public class LottoTicket {
         int year = now.get(Calendar.YEAR);
         int month = now.get(Calendar.MONTH) + 1; // Note: zero based!
         int day = now.get(Calendar.DAY_OF_MONTH);
-        int date = year*10000 + month*100 + day;
+        int date = year * 10000 + month*100 + day;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("test");
         query.selectKeys(keys);
         query.whereLessThanOrEqualTo("DATE", date);
@@ -99,9 +111,19 @@ public class LottoTicket {
                 if (e == null) {
                     for (ParseObject po : query) {
                         ParseFile thisPic = po.getParseFile("profilepic");
+                        Integer ticketDate = po.getInt("DATE");
+                        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd");
+                        Date aDate = null;
+                        try {
+                            aDate = originalFormat.parse(ticketDate.toString());
+                        } catch (java.text.ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                        SimpleDateFormat newFormat = new SimpleDateFormat("MM/dd/yyyy");
+                        String formatedDate = newFormat.format(aDate);
                         String thisTicket = (po.getString("B1") + " " + po.getString("B2") + " " + po.getString("B3") +
                                 " " + po.getString("B4") + " " + po.getString("B5") + " " + po.getString("PB") +
-                                " date " + po.getInt("DATE") );
+                                " date " + formatedDate);
                         pastTickets.add(new LottoTicket(thisTicket, thisPic));
                     }
                 } else {
@@ -129,9 +151,19 @@ public class LottoTicket {
                 if (e == null) {
                     for (ParseObject po : query) {
                         ParseFile thisPic = po.getParseFile("profilepic");
+                        Integer ticketDate = po.getInt("DATE");
+                        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd");
+                        Date aDate = null;
+                        try {
+                            aDate = originalFormat.parse(ticketDate.toString());
+                        } catch (java.text.ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                        SimpleDateFormat newFormat = new SimpleDateFormat("MM/dd/yyyy");
+                        String formatedDate = newFormat.format(aDate);
                         String thisTicket = (po.getString("B1") + " " + po.getString("B2") + " " + po.getString("B3") +
                                 " " + po.getString("B4") + " " + po.getString("B5") + " " + po.getString("PB") +
-                                " date " + po.getInt("DATE") );
+                                " date " + formatedDate );
                         allTickets.add(new LottoTicket(thisTicket, thisPic));
                     }
                 } else {
