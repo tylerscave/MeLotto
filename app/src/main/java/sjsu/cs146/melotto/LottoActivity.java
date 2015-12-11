@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -35,24 +36,13 @@ public class LottoActivity extends AppCompatActivity {
 
         // adding a delay to allow parse query to complete before app continues
         try {
-            Thread.sleep(6000);
+            Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //final ActionBar ab = getSupportActionBar();
-        //ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-        //ab.setDisplayHomeAsUpEnabled(true);
-
-        /*mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (navigationView != null) {
-            setupDrawerContent(navigationView);
-        }*/
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
@@ -102,10 +92,11 @@ public class LottoActivity extends AppCompatActivity {
         adapter.addFragment(new LottoNewListFragment(), "New Tickets");
         adapter.addFragment(new LottoPastListFragment(), "Past Tickets");
         adapter.addFragment(new LottoPrintListFragment(), "Print Report");
+        viewPager.setOffscreenPageLimit(0);
         viewPager.setAdapter(adapter);
     }
 
-    static class Adapter extends FragmentPagerAdapter {
+    static class Adapter extends FragmentStatePagerAdapter {
         private final List<Fragment> mFragments = new ArrayList<>();
         private final List<String> mFragmentTitles = new ArrayList<>();
 

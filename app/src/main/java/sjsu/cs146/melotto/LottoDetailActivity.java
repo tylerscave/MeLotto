@@ -151,6 +151,7 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+
             case R.id.saveButton:
                 ParseObject lottoTicket = new ParseObject("test");
 
