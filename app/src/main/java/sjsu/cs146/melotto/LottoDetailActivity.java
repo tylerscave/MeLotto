@@ -57,6 +57,7 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
     private int day;
     private int month;
     private int year;
+    private int date;
 
     private ViewGroup vg;
     private LinearLayout mLayout;
@@ -173,10 +174,7 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                     lottoTicket.put("profilepic", file);
                     // }
                 }
-                lottoTicket.put("DAY", day);
-                lottoTicket.put("MONTH", month);
-                lottoTicket.put("YEAR", year);
-                lottoTicket.saveInBackground();
+                lottoTicket.put("DATE", date);
                 lottoTicket.saveInBackground();
                 break;
             case R.id.addButton:
@@ -201,21 +199,6 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                 alertDatePicker();
         }
     }
-    /*private LinearLayout createNewLayout(){
-        mLayout2.addView(createNewTextView(mEditText.getText().toString()));
-        //mLayout2.addView(createNewTextView(mEditText.getText().toString()));
-        return mLayout2;
-    }
-        private EditText createNewTextView(String text) {
-            final LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            final EditText editText = new EditText(this);
-            editText.setLayoutParams(lparams);
-            editText.setLines(1);
-            final int maxLength = 2;
-            editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
-            editText.setText("-" + text);
-            return editText;
-        }*/
     //private ImageView imageView;
     private void loadBackdrop() {
         imageView = (ImageView) findViewById(R.id.backdrop);
@@ -288,6 +271,7 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                         month = myDatePicker.getMonth() + 1;
                         day = myDatePicker.getDayOfMonth();
                         year = myDatePicker.getYear();
+                        date = 10000*year+100*month+day;
 
 
                         Toast.makeText(getApplicationContext(), month + "/" + day + "/" + year, Toast.LENGTH_LONG).show();
