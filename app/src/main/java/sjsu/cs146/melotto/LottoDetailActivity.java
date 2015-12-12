@@ -177,6 +177,14 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                 }
                 lottoTicket.put("DATE", date);
                 lottoTicket.saveInBackground();
+                if(date>=LottoTicket.getTodaysDate()) {
+                    LottoTicket.setNewTicketsMap();
+                    LottoTicket.getNewTicketsList();
+                }
+                else {
+                    LottoTicket.setPastTicketsMap();
+                    LottoTicket.getPastTicketsList();
+                }
                 break;
             case R.id.addButton:
                 //vg.addView(createNewLayout());

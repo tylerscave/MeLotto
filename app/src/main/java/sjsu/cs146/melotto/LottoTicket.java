@@ -65,7 +65,7 @@ public class LottoTicket {
         return date;
     }
 
-    public void setNewTicketsMap(){
+    public static void setNewTicketsMap(){
         int date = getTodaysDate();
         List<String> keys = Arrays.asList("B1", "B2", "B3", "B4", "B5", "PB", "DATE", "profilepic");
         ParseQuery<ParseObject> query = ParseQuery.getQuery("test");
@@ -115,7 +115,7 @@ public class LottoTicket {
             return list;
     }
 
-    public void setPastTicketsMap(){
+    public static void setPastTicketsMap(){
         int date = getTodaysDate();
         List<String> keys = Arrays.asList("B1", "B2", "B3", "B4", "B5", "PB", "DATE", "profilepic");
         ParseQuery<ParseObject> query = ParseQuery.getQuery("test");

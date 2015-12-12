@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 
@@ -92,11 +93,10 @@ public class LottoActivity extends AppCompatActivity {
         adapter.addFragment(new LottoNewListFragment(), "New Tickets");
         adapter.addFragment(new LottoPastListFragment(), "Past Tickets");
         adapter.addFragment(new LottoPrintListFragment(), "Print Report");
-        viewPager.setOffscreenPageLimit(0);
         viewPager.setAdapter(adapter);
     }
 
-    static class Adapter extends FragmentStatePagerAdapter {
+    static class Adapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragments = new ArrayList<>();
         private final List<String> mFragmentTitles = new ArrayList<>();
 

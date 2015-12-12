@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentContainer;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -28,7 +29,6 @@ public class LottoNewListFragment extends Fragment {
     private static List<String> list = new ArrayList<>();
     private static List<ParseFile> pics = new ArrayList<>();
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,7 +37,6 @@ public class LottoNewListFragment extends Fragment {
         setupRecyclerView(rv);
         return rv;
     }
-
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
@@ -111,7 +110,7 @@ public class LottoNewListFragment extends Fragment {
             holder.mCheckBox.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v) {
                     LottoTicket.getNewTicketsList().get(position).togglePrint();
-                    LottoTicket.getPrintTicketsList();
+                    //LottoTicket.getPrintTicketsList();
                 }
             });
             holder.mView.setOnClickListener(new View.OnClickListener() {

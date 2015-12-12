@@ -110,8 +110,8 @@ public class LottoPrintListFragment extends Fragment {
             holder.mCheckBox.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     LottoTicket.getPrintTicketsList().get(position).togglePrint();
-                    LottoTicket.getNewTicketsList();
-                    LottoTicket.getPrintTicketsList();
+                    //LottoTicket.getNewTicketsList();
+                    //LottoTicket.getPrintTicketsList();
                 }
             });
             holder.mView.setOnClickListener(new View.OnClickListener() {
