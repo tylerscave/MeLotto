@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
@@ -26,6 +27,8 @@ public class LottoActivity extends AppCompatActivity {
 
     //private DrawerLayout mDrawerLayout;
     //private int backButtonCount;
+    private ViewPager viewPager;
+    private Adapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,7 @@ public class LottoActivity extends AppCompatActivity {
 
         // adding a delay to allow parse query to complete before app continues
         try {
-            Thread.sleep(4000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -45,19 +48,64 @@ public class LottoActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
             setupViewPager(viewPager);
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+
+
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Context context = view.getContext();
-                Intent intent = new Intent(context, LottoDetailActivity.class);
-                intent.putExtra(LottoDetailActivity.EXTRA_NAME, "New Lotto Ticket");
-                context.startActivity(intent);
+                switch(view.getId()){
+                    case R.id.fab:
+                        if(viewPager.getCurrentItem()<2){
+                            //Toast.makeText(getApplicationContext(),"First",Toast.LENGTH_LONG).show();
+                            Context context = view.getContext();
+                            Intent intent = new Intent(context, LottoDetailActivity.class);
+                            intent.putExtra(LottoDetailActivity.EXTRA_NAME, "New Lotto Ticket");
+                            context.startActivity(intent);
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(),"Print PDF",Toast.LENGTH_LONG).show();
+                        }
+                }
+
+
+
+            }
+        });
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                if (position == 2) {
+                    fab.setImageResource(R.drawable.ic_pdf);
+                }
+                else
+                    fab.setImageResource(R.drawable.ic_add);
+                /*if(position==1) {
+                    Toast.makeText(LottoActivity.this,
+                            "Selected page position: " + position, Toast.LENGTH_SHORT).show();
+                    LottoTicket.getPastTicketsList();
+                    adapter.notifyDataSetChanged();
+                    //ViewGroup vg = (ViewGroup) findViewById (R.id.recyclerview);
+                    //vg.invalidate();
+                }*/
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
 
@@ -89,7 +137,7 @@ public class LottoActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getSupportFragmentManager());
+        adapter = new Adapter(getSupportFragmentManager());
         adapter.addFragment(new LottoNewListFragment(), "New Tickets");
         adapter.addFragment(new LottoPastListFragment(), "Past Tickets");
         adapter.addFragment(new LottoPrintListFragment(), "Print Report");

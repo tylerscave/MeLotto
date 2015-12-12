@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -46,8 +47,8 @@ public class LottoPastListFragment extends Fragment {
     }
 
     public static List<String> setPastTickets(List<LottoTicket> tickets){
-        list = new ArrayList<>();
-        pics = new ArrayList<>();
+        list.clear();
+        pics.clear();
         for (LottoTicket ticket : tickets){
             list.add(ticket.getNums());
             pics.add(ticket.getPic());
@@ -122,6 +123,7 @@ public class LottoPastListFragment extends Fragment {
                     intent.putExtra(LottoDetailActivity.EXTRA_NAME, holder.mBoundString);
                     context.startActivity(intent);
                     LottoDetailActivity.setPicUrl(pics.get(position).getUrl());
+
                 }
             });
             Glide.with(holder.mImageView.getContext())

@@ -2,6 +2,7 @@ package sjsu.cs146.melotto;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -45,8 +47,8 @@ public class LottoNewListFragment extends Fragment {
     }
 
     public static List<String> setNewTickets(List<LottoTicket> tickets){
-        list = new ArrayList<>();
-        pics = new ArrayList<>();
+        list.clear();
+        pics.clear();
         for (LottoTicket ticket : tickets){
             list.add(ticket.getNums());
             pics.add(ticket.getPic());
@@ -105,6 +107,7 @@ public class LottoNewListFragment extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mBoundString = mValues.get(position);
             holder.mTextView.setText(mValues.get(position));
+
             //holder.mCheckBox.setChecked(false);
             holder.mCheckBox.setChecked(LottoTicket.getNewTicketsList().get(position).getSelected());
             holder.mCheckBox.setOnClickListener(new View.OnClickListener(){

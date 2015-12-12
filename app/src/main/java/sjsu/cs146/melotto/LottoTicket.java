@@ -90,7 +90,7 @@ public class LottoTicket {
                         //String objectId = po.getString("objectId");
                         String thisTicket = (po.getString("B1") + " " + po.getString("B2") + " " + po.getString("B3") +
                                 " " + po.getString("B4") + " " + po.getString("B5") + " " + po.getString("PB")
-                                + formatedDate);
+                                + "  " + formatedDate);
                         newTicketsMap.put(objectId, new LottoTicket(thisTicket, thisPic, false));
                     }
                 }else{
@@ -140,7 +140,7 @@ public class LottoTicket {
                         //String objectId = po.getString("objectId");
                         String thisTicket = (po.getString("B1") + " " + po.getString("B2") + " " + po.getString("B3") +
                                 " " + po.getString("B4") + " " + po.getString("B5") + " " + po.getString("PB")
-                                + formatedDate);
+                                + "  " + formatedDate);
                         pastTicketsMap.put(objectId, new LottoTicket(thisTicket, thisPic, false));
                     }
                 }else{

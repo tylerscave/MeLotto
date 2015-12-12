@@ -46,8 +46,8 @@ public class LottoPrintListFragment extends Fragment {
     }
 
     public static List<String> setPrintTickets(List<LottoTicket> tickets){
-        list = new ArrayList<>();
-        pics = new ArrayList<>();
+        list.clear();
+        pics.clear();
         for (LottoTicket ticket : tickets){
             list.add(ticket.getNums());
             pics.add(ticket.getPic());
