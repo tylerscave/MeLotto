@@ -35,6 +35,8 @@ public class ProfileActivity extends Activity {
         loginOrLogoutButton = (Button) findViewById(R.id.login_or_logout_button);
         titleTextView.setText(R.string.profile_title_logged_in);
 
+        new WinningNumbers(); // random place to initialize the winning numbers but I had to put it here to keep the app from crashing
+
         loginOrLogoutButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

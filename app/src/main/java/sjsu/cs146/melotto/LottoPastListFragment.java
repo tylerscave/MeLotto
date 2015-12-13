@@ -50,7 +50,7 @@ public class LottoPastListFragment extends Fragment {
         list.clear();
         pics.clear();
         for (LottoTicket ticket : tickets){
-            list.add(ticket.getNums());
+            list.add(ticket.getPrintString());
             pics.add(ticket.getPic());
         }
         return list;
