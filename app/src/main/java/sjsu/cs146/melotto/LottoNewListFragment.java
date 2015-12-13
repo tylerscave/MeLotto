@@ -2,30 +2,34 @@ package sjsu.cs146.melotto;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentContainer;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 
 public class LottoNewListFragment extends Fragment {
     private static List<String> list = new ArrayList<>();
     private static List<ParseFile> pics = new ArrayList<>();
-
 
     @Nullable
     @Override
@@ -36,22 +40,19 @@ public class LottoNewListFragment extends Fragment {
         return rv;
     }
 
-
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                setNewTickets(LottoTicket.getNewList())));
+                setNewTickets(LottoTicket.getNewTicketsList())));
     }
 
     public static List<String> setNewTickets(List<LottoTicket> tickets){
+        list.clear();
+        pics.clear();
         for (LottoTicket ticket : tickets){
-            list.add(ticket.getNums());
+            list.add(ticket.getPrintString());
             pics.add(ticket.getPic());
         }
-        HashSet<String> hs = new HashSet<>();
-        hs.addAll(list);
-        list.clear();
-        list.addAll(hs);
         return list;
     }
 
@@ -68,14 +69,16 @@ public class LottoNewListFragment extends Fragment {
             public final View mView;
             public final ImageView mImageView;
             public final TextView mTextView;
+            private final CheckBox mCheckBox;
+            private LottoTicket mItem;
 
             private ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mImageView = (ImageView) view.findViewById(R.id.avatar);
                 mTextView = (TextView) view.findViewById(android.R.id.text1);
+                mCheckBox = (CheckBox) view.findViewById(R.id.checkbox);
             }
-
             @Override
             public String toString() {
                 return super.toString() + " '" + mTextView.getText();
@@ -104,7 +107,12 @@ public class LottoNewListFragment extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mBoundString = mValues.get(position);
             holder.mTextView.setText(mValues.get(position));
-
+            holder.mCheckBox.setChecked(LottoTicket.getNewTicketsList().get(position).getSelected());
+            holder.mCheckBox.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v) {
+                    LottoTicket.getNewTicketsList().get(position).togglePrint();
+                }
+            });
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -116,9 +124,9 @@ public class LottoNewListFragment extends Fragment {
                 }
             });
             Glide.with(holder.mImageView.getContext())
-             .load(pics.get(position).getUrl())
-                 .fitCenter()
-                 .into(holder.mImageView);
+                    .load(pics.get(position).getUrl())
+                    .fitCenter()
+                    .into(holder.mImageView);
 
         }
 
