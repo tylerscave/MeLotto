@@ -2,6 +2,7 @@ package sjsu.cs146.melotto;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ import java.util.List;
 public class LottoPastListFragment extends Fragment {
     private static List<String> list = new ArrayList<>();
     private static List<ParseFile> pics = new ArrayList<>();
+    private static List<Boolean> winners = new ArrayList<>();
 
 
     @Nullable
@@ -49,9 +51,11 @@ public class LottoPastListFragment extends Fragment {
     public static List<String> setPastTickets(List<LottoTicket> tickets){
         list.clear();
         pics.clear();
+        winners.clear();
         for (LottoTicket ticket : tickets){
-            list.add(ticket.getNums());
+            list.add(ticket.getPrintString());
             pics.add(ticket.getPic());
+            winners.add(ticket.getWinners());
         }
         return list;
     }
@@ -107,12 +111,13 @@ public class LottoPastListFragment extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mBoundString = mValues.get(position);
             holder.mTextView.setText(mValues.get(position));
-            //holder.mCheckBox.setChecked(false);
+            if(winners.get(position)==true){
+                holder.mTextView.setTextColor(Color.RED);
+            }
             holder.mCheckBox.setChecked(LottoTicket.getPastTicketsList().get(position).getSelected());
             holder.mCheckBox.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v) {
                     LottoTicket.getPastTicketsList().get(position).togglePrint();
-                    //LottoTicket.getPrintTicketsList();
                 }
             });
             holder.mView.setOnClickListener(new View.OnClickListener() {

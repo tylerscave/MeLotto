@@ -1,26 +1,30 @@
 package sjsu.cs146.melotto;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.parse.ParseUser;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +45,7 @@ public class LottoActivity extends AppCompatActivity {
 
         // adding a delay to allow parse query to complete before app continues
         try {
-            Thread.sleep(1000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -53,8 +57,6 @@ public class LottoActivity extends AppCompatActivity {
         if (viewPager != null) {
             setupViewPager(viewPager);
         }
-
-
 
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -70,13 +72,18 @@ public class LottoActivity extends AppCompatActivity {
                             intent.putExtra(LottoDetailActivity.EXTRA_NAME, "New Lotto Ticket");
                             context.startActivity(intent);
                         }
-                        else{
-                            Toast.makeText(getApplicationContext(),"Print PDF",Toast.LENGTH_LONG).show();
+                        else if(viewPager.getCurrentItem() == 2){
+                            Toast.makeText(getApplicationContext(),"MeLotto.pdf was created for you",
+                                    Toast.LENGTH_LONG).show();
+                            try {
+                                makePdf();
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (DocumentException de) {
+                                de.printStackTrace();
+                            }
                         }
                 }
-
-
-
             }
         });
 
@@ -112,6 +119,29 @@ public class LottoActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    /**
+     * makePdf is used to create and save to disk a PDF of selected tickets
+     * @throws FileNotFoundException
+     * @throws DocumentException
+     */
+    private void makePdf() throws FileNotFoundException, DocumentException {
+        List<LottoTicket> printList = LottoTicket.getPrintTicketsList();
+
+        // Create the new PDF doc to be written to
+        Document document = new Document();
+        String file = Environment.getExternalStorageDirectory().getPath() + "/MeLotto.pdf";
+        PdfWriter.getInstance(document,new FileOutputStream(file));
+        document.newPage();
+        document.open();
+
+        // add new tickets and a title to the PDF
+        document.add(new Paragraph("MeLotto Ticket Numbers"));
+        for (LottoTicket lt : printList){
+            document.add(new Paragraph(lt.getPrintString()));
+        }
+        document.close();
     }
 
     @Override

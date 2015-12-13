@@ -1,44 +1,73 @@
 package sjsu.cs146.melotto;
-
 import android.util.Log;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class WinningNumbers {
+    private static LinkedList<WinningNumbers> list = new LinkedList<>();
+    private int drawDate;
+    private int[] Ball = new int[5];
+    private int PB;
 
-    private static int drawDate;
-    private static int[] B;
-    private static int PB;
+    public WinningNumbers(){
+        setWinningNumbers();
+    }
 
-    public static void setNewTicketsMap(){
-        List<String> keys = Arrays.asList("DATE", "B1", "B2", "B3", "B4", "B5", "PB");
+    public WinningNumbers(int drawDate, int[] Ball, int PB){
+        this.drawDate = drawDate;
+        this.Ball = Ball;
+        this.PB = PB;
+    }
+
+    public static LinkedList<WinningNumbers> getWinningNumbers(){
+        return list;
+    }
+
+    public int getDrawDate(){
+        return drawDate;
+    }
+
+    public int[] getBalls(){
+        return Ball;
+    }
+
+    public int getPB() {
+        return PB;
+    }
+
+
+    public static void setWinningNumbers(){
+        List<String> keys = Arrays.asList("DATE", "WB1", "WB2", "WB3", "WB4", "WB5", "PB");
         ParseQuery<ParseObject> query = ParseQuery.getQuery("lotto");
         query.selectKeys(keys);
+        //query.orderByDescending("DATE");
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> query, ParseException e) {
                 if (e == null) {
                     for (ParseObject po : query) {
-                        drawDate = po.getInt("DATE");
-
-                        String objectId = po.getObjectId();
-                        //String objectId = po.getString("objectId");
-                        String thisTicket = (po.getString("B1") + " " + po.getString("B2") + " " + po.getString("B3") +
-                                " " + po.getString("B4") + " " + po.getString("B5") + " " + po.getString("PB")
-                                + "  ");
+                        int dd = po.getInt("DATE");
+                        int[] b = new int[5];
+                        b[0]=po.getInt("WB1");
+                        b[1]=po.getInt("WB2");
+                        b[2]=po.getInt("WB3");
+                        b[3]=po.getInt("WB4");
+                        b[4]=po.getInt("WB5");
+                        int pb=po.getInt("PB");
+                        list.add(new WinningNumbers(dd, b, pb));
                     }
                 }else{
-                    Log.d("B1", "Error: " + e.getMessage());
-                    Log.d("B2", "Error: " + e.getMessage());
-                    Log.d("B3", "Error: " + e.getMessage());
-                    Log.d("B4", "Error: " + e.getMessage());
-                    Log.d("B5", "Error: " + e.getMessage());
-                    Log.d("PB", "Error: " + e.getMessage());
                     Log.d("DATE", "Error: " + e.getMessage());
-                    Log.d("profilepic", "Error: " + e.getMessage());
+                    Log.d("WB1", "Error: " + e.getMessage());
+                    Log.d("WB2", "Error: " + e.getMessage());
+                    Log.d("WB3", "Error: " + e.getMessage());
+                    Log.d("WB4", "Error: " + e.getMessage());
+                    Log.d("WB5", "Error: " + e.getMessage());
+                    Log.d("PB", "Error: " + e.getMessage());
                 }
             }
         });
