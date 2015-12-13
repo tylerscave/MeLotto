@@ -29,6 +29,7 @@ public class LottoTicket {
     private String printString;
     private ParseFile pic;
     private Boolean selected;
+    private Boolean winner;
 
     public LottoTicket() {
         setNewTicketsMap();
@@ -36,13 +37,14 @@ public class LottoTicket {
     }
 
 
-    public LottoTicket(String printString, int[] nums, int pb, int date, ParseFile pic, Boolean selected) {
+    public LottoTicket(String printString, int[] nums, int pb, int date, ParseFile pic, Boolean selected, Boolean winner) {
         this.printString = printString;
         this.date = date;
         this.nums = nums;
         this.pb = pb;
         this.pic = pic;
         this.selected = selected;
+        this.winner = winner;
     }
 
     public void togglePrint() {
@@ -76,6 +78,9 @@ public class LottoTicket {
         return pic;
     }
 
+    public Boolean getWinners(){
+        return winner;
+    }
 
 
     public static int getTodaysDate() {
@@ -120,7 +125,7 @@ public class LottoTicket {
                         String ticketString = (po.getString("B1") + " " + po.getString("B2") + " " + po.getString("B3") +
                                 " " + po.getString("B4") + " " + po.getString("B5") + " " + po.getString("PB")
                                 + "  " + formatedDate);
-                        newTicketsMap.put(objectId, new LottoTicket(ticketString, balls, PB, ticketDate, thisPic, false));
+                        newTicketsMap.put(objectId, new LottoTicket(ticketString, balls, PB, ticketDate, thisPic, false, false));
                     }
                 }else{
                     Log.d("B1", "Error: " + e.getMessage());
@@ -146,7 +151,7 @@ public class LottoTicket {
 
     public static void setPastTicketsMap(){
         int date = getTodaysDate();
-        List<String> keys = Arrays.asList("B1", "B2", "B3", "B4", "B5", "PB", "DATE", "profilepic");
+        List<String> keys = Arrays.asList("B1", "B2", "B3", "B4", "B5", "PB", "DATE", "profilepic", "WINNER");
         ParseQuery<ParseObject> query = ParseQuery.getQuery("test");
         query.selectKeys(keys);
         query.whereLessThan("DATE", date);
@@ -183,12 +188,12 @@ public class LottoTicket {
                                 else{}
                             }
                         }
-
+                        Boolean wn = po.getBoolean("WINNER");
 
                         String ticketString = (po.getString("B1") + " " + po.getString("B2") + " " + po.getString("B3") +
                                 " " + po.getString("B4") + " " + po.getString("B5") + " " + po.getString("PB")
                                 + "  " + formatedDate);
-                        pastTicketsMap.put(objectId, new LottoTicket(ticketString, balls, PB, ticketDate, thisPic, false));
+                        pastTicketsMap.put(objectId, new LottoTicket(ticketString, balls, PB, ticketDate, thisPic, false, wn));
                     }
                 }else{
                     Log.d("B1", "Error: " + e.getMessage());
@@ -223,7 +228,6 @@ public class LottoTicket {
         int i=0;
         for(LottoTicket l:pastTicketsMap.values()){
             list.add(l);
-
             i++;
         }
         return list;

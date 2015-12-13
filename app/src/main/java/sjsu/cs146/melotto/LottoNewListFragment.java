@@ -107,13 +107,10 @@ public class LottoNewListFragment extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mBoundString = mValues.get(position);
             holder.mTextView.setText(mValues.get(position));
-
-            //holder.mCheckBox.setChecked(false);
             holder.mCheckBox.setChecked(LottoTicket.getNewTicketsList().get(position).getSelected());
             holder.mCheckBox.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v) {
                     LottoTicket.getNewTicketsList().get(position).togglePrint();
-                    //LottoTicket.getPrintTicketsList();
                 }
             });
             holder.mView.setOnClickListener(new View.OnClickListener() {
