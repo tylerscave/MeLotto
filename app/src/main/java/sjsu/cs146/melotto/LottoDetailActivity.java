@@ -57,6 +57,7 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
     private int day;
     private int month;
     private int year;
+    private int date;
 
     private ViewGroup vg;
     private LinearLayout mLayout;
@@ -80,17 +81,11 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(lottoName);
+        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         Bundle extras = intent.getExtras();
-        if(extras.getString(LottoDetailActivity.EXTRA_NAME).equals("New Lotto Ticket")){
 
-        }
-        else {
-            loadBackdrop();
-        }
+        collapsingToolbar.setTitle(" ");
 
         b1 = (EditText) findViewById(R.id.B1);
         b2 = (EditText) findViewById(R.id.B2);
@@ -99,10 +94,26 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
         b5 = (EditText) findViewById(R.id.B5);
         pb = (EditText) findViewById(R.id.PB);
 
+
         saveButton = (Button) findViewById(R.id.saveButton);
         //deleteButton = (Button) findViewById(R.id.deleteButton);
 
         pickDateButton = (Button) findViewById(R.id.pickDateButton);
+
+        if(extras.getString(LottoDetailActivity.EXTRA_NAME).equals("New Lotto Ticket")){
+
+        }
+        else {
+            b1.setText(lottoName.substring(0,2));
+            b2.setText(lottoName.substring(3,5));
+            b3.setText(lottoName.substring(6,8));
+            b4.setText(lottoName.substring(9,11));
+            b5.setText(lottoName.substring(12,14));
+            pb.setText(lottoName.substring(15,17));
+            pickDateButton.setText(lottoName.substring(19,29));
+            loadBackdrop();
+        }
+
 
         pickStateSpinner = (Spinner) findViewById(R.id.pickStateSpinner);
         pickGameSpinner = (Spinner) findViewById(R.id.pickGameSpinner);
@@ -150,15 +161,16 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+
             case R.id.saveButton:
                 ParseObject lottoTicket = new ParseObject("test");
 
-                lottoTicket.put("B1", b1.getText().toString());
-                lottoTicket.put("B2", b2.getText().toString());
-                lottoTicket.put("B3", b3.getText().toString());
-                lottoTicket.put("B4", b4.getText().toString());
-                lottoTicket.put("B5", b5.getText().toString());
-                lottoTicket.put("PB", pb.getText().toString());
+                lottoTicket.put("B1", String.format("%02d", Integer.parseInt(b1.getText().toString())));
+                lottoTicket.put("B2", String.format("%02d", Integer.parseInt(b2.getText().toString())));
+                lottoTicket.put("B3", String.format("%02d", Integer.parseInt(b3.getText().toString())));
+                lottoTicket.put("B4", String.format("%02d", Integer.parseInt(b4.getText().toString())));
+                lottoTicket.put("B5", String.format("%02d", Integer.parseInt(b5.getText().toString())));
+                lottoTicket.put("PB", String.format("%02d", Integer.parseInt(pb.getText().toString())));
 
                 //lottoTicket.saveInBackground();
                 Toast.makeText(getApplicationContext(), "saved", Toast.LENGTH_LONG).show();
@@ -173,11 +185,16 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                     lottoTicket.put("profilepic", file);
                     // }
                 }
-                lottoTicket.put("DAY", day);
-                lottoTicket.put("MONTH", month);
-                lottoTicket.put("YEAR", year);
+                lottoTicket.put("DATE", date);
                 lottoTicket.saveInBackground();
-                lottoTicket.saveInBackground();
+                if(date>=LottoTicket.getTodaysDate()) {
+                    LottoTicket.setNewTicketsMap();
+                    LottoTicket.getNewTicketsList();
+                }
+                else {
+                    LottoTicket.setPastTicketsMap();
+                    LottoTicket.getPastTicketsList();
+                }
                 break;
             case R.id.addButton:
                 //vg.addView(createNewLayout());
@@ -201,21 +218,6 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                 alertDatePicker();
         }
     }
-    /*private LinearLayout createNewLayout(){
-        mLayout2.addView(createNewTextView(mEditText.getText().toString()));
-        //mLayout2.addView(createNewTextView(mEditText.getText().toString()));
-        return mLayout2;
-    }
-        private EditText createNewTextView(String text) {
-            final LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            final EditText editText = new EditText(this);
-            editText.setLayoutParams(lparams);
-            editText.setLines(1);
-            final int maxLength = 2;
-            editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
-            editText.setText("-" + text);
-            return editText;
-        }*/
     //private ImageView imageView;
     private void loadBackdrop() {
         imageView = (ImageView) findViewById(R.id.backdrop);
@@ -288,11 +290,12 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                         month = myDatePicker.getMonth() + 1;
                         day = myDatePicker.getDayOfMonth();
                         year = myDatePicker.getYear();
+                        date = 10000*year+100*month+day;
 
 
-                        Toast.makeText(getApplicationContext(), month + "/" + day + "/" + year, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), month + "/" + day + "/" + year, Toast.LENGTH_LONG).show();
                         //showToast(month + "/" + day + "/" + year);
-                        pickDateButton.setText(month + "/" + day + "/" + year);
+                        pickDateButton.setText(String.format("%02d", month) + "/" + String.format("%02d", day) + "/" + year);
                         dialog.cancel();
 
                     }
@@ -301,7 +304,7 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @TargetApi(11)
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getApplicationContext(), "Cancelled", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), "Cancelled", Toast.LENGTH_LONG).show();
                         dialog.cancel();
                     }
                 }).show();
