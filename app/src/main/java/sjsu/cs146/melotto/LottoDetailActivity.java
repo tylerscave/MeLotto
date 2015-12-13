@@ -171,7 +171,7 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                 lottoTicket.put("B4", String.format("%02d", Integer.parseInt(b4.getText().toString())));
                 lottoTicket.put("B5", String.format("%02d", Integer.parseInt(b5.getText().toString())));
                 lottoTicket.put("PB", String.format("%02d", Integer.parseInt(pb.getText().toString())));
-
+                lottoTicket.put("WINNER", false);
                 //lottoTicket.saveInBackground();
                 Toast.makeText(getApplicationContext(), "saved", Toast.LENGTH_LONG).show();
                 if(imageBitmap!=null) {
