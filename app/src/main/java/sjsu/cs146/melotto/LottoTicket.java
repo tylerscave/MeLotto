@@ -14,13 +14,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class LottoTicket {
+public class LottoTicket implements Comparable<LottoTicket>{
     private static HashMap<String, LottoTicket> newTicketsMap = new HashMap<String, LottoTicket>();
     private static HashMap<String, LottoTicket> pastTicketsMap = new HashMap<String, LottoTicket>();
     private int[] nums;
@@ -142,11 +144,22 @@ public class LottoTicket {
     }
 
     public static List<LottoTicket> getNewTicketsList() {
-        List<LottoTicket> list = new LinkedList<>();
+        ArrayList<LottoTicket> list = new ArrayList<>();
         for(LottoTicket l:newTicketsMap.values()){
             list.add(l);
         }
+        Collections.sort(list);
             return list;
+    }
+
+    @Override
+    public int compareTo(LottoTicket stuff) {
+        int compareDates = stuff.getDate();
+        return compareDates - this.date;
+    }
+    @Override
+    public String toString() {
+        return "";
     }
 
     public static void setPastTicketsMap(){
@@ -230,6 +243,7 @@ public class LottoTicket {
             list.add(l);
             i++;
         }
+        Collections.sort(list);
         return list;
     }
 
@@ -246,6 +260,7 @@ public class LottoTicket {
                 list.add(l);
             else{}
         }
+        Collections.sort(list);
         return list;
     }
 }
