@@ -14,19 +14,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-
+/**
+ * COPYRIGHT (C) 2015 Chris Van Horn, Tyler Jones. All Rights Reserved.
+ * LottoPastListFragment is responsible for fragment showing lotto tickets previous to the current
+ * date
+ *
+ * Solves CmpE131-02 MeLotto
+ * @author Chris Van Horn
+ * @author Tyler Jones
+ * @version 1.01 2015/12/14
+ */
 public class LottoPastListFragment extends Fragment {
+
+    // declare all class variables
     private static List<String> list = new ArrayList<>();
     private static List<ParseFile> pics = new ArrayList<>();
     private static List<Boolean> winners = new ArrayList<>();
@@ -41,13 +49,21 @@ public class LottoPastListFragment extends Fragment {
         return rv;
     }
 
-
+    /**
+     * setupRecyclerView to set up the list and refresh it as tab is selected
+     * @param recyclerView
+     */
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
                 setPastTickets(LottoTicket.getPastTicketsList())));
     }
 
+    /**
+     * setPastTickets sets the tickets from Parse
+     * @param tickets
+     * @return
+     */
     public static List<String> setPastTickets(List<LottoTicket> tickets){
         list.clear();
         pics.clear();
@@ -60,6 +76,9 @@ public class LottoPastListFragment extends Fragment {
         return list;
     }
 
+    /**
+     * Inner class used to adapt the list for recyclerview
+     */
     public static class SimpleStringRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
 

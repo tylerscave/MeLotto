@@ -1,4 +1,5 @@
 package sjsu.cs146.melotto;
+
 import android.util.Log;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -8,22 +9,42 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * COPYRIGHT (C) 2015 Chris Van Horn. All Rights Reserved.
+ * WinningNumbers class is responsible for determining winning lottery tickets
+ *
+ * Solves CmpE131-02 MeLotto
+ * @author Chris Van Horn
+ * @version 1.01 2015/12/14
+ */
 public class WinningNumbers {
+
+    // declare all class variables
     private static LinkedList<WinningNumbers> list = new LinkedList<>();
     private int drawDate;
     private int[] Ball = new int[5];
     private int PB;
 
+    /**
+     * constructor to set winning numbers when object is created
+     */
     public WinningNumbers(){
         setWinningNumbers();
     }
 
+    /**
+     * constructor for the winning numbers object
+     * @param drawDate
+     * @param Ball
+     * @param PB
+     */
     public WinningNumbers(int drawDate, int[] Ball, int PB){
         this.drawDate = drawDate;
         this.Ball = Ball;
         this.PB = PB;
     }
 
+    // accessors and mutators for the class
     public static LinkedList<WinningNumbers> getWinningNumbers(){
         return list;
     }
@@ -40,7 +61,9 @@ public class WinningNumbers {
         return PB;
     }
 
-
+    /**
+     * setWinningNumbers() is responsible for getting winning tickets from Parse
+     */
     public static void setWinningNumbers(){
         List<String> keys = Arrays.asList("DATE", "WB1", "WB2", "WB3", "WB4", "WB5", "PB");
         ParseQuery<ParseObject> query = ParseQuery.getQuery("lotto");

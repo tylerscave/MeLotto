@@ -33,10 +33,20 @@ import com.parse.ParseObject;
 
 import java.io.ByteArrayOutputStream;
 
+/**
+ * COPYRIGHT (C) 2015 Chris Van Horn, Tyler Jones. All Rights Reserved.
+ * LottoDetailActivity class is responsible for detailed activity such as viewing, editing, and
+ * adding new Lotto tickets
+ *
+ * Solves CmpE131-02 MeLotto
+ * @author Chris Van Horn
+ * @author Tyler Jones
+ * @version 1.01 2015/12/14
+ */
 public class LottoDetailActivity extends AppCompatActivity implements OnClickListener{
 
+    // declare all class variables
     public static final String EXTRA_NAME = "cheese_name";
-
     private Button saveButton;
     private Button deleteButton;
     private Button pickDateButton;
@@ -44,7 +54,6 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
     private Spinner pickGameSpinner;
     private String[] states;
     private String[] games;
-    private EditText cheeseText;
     private EditText b1;
     private EditText b2;
     private EditText b3;
@@ -58,14 +67,12 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
     private int month;
     private int year;
     private int date;
-
     private ViewGroup vg;
     private LinearLayout mLayout;
     private LinearLayout mLayout2;
     private EditText mEditText;
     private Button dButton;
     private Button aButton;
-
     private int countViews;
 
     @Override
@@ -73,20 +80,19 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_lotto);
 
-
+        // get the lotto numbers for display
         Intent intent = getIntent();
         final String lottoName = intent.getStringExtra(EXTRA_NAME);
 
+        // setup the toolbar
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-
         Bundle extras = intent.getExtras();
-
         collapsingToolbar.setTitle(" ");
 
+        // the lotto numbers to be displayed
         b1 = (EditText) findViewById(R.id.B1);
         b2 = (EditText) findViewById(R.id.B2);
         b3 = (EditText) findViewById(R.id.B3);
@@ -94,15 +100,15 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
         b5 = (EditText) findViewById(R.id.B5);
         pb = (EditText) findViewById(R.id.PB);
 
-
+        // buttons for adding new tickets
         saveButton = (Button) findViewById(R.id.saveButton);
         //deleteButton = (Button) findViewById(R.id.deleteButton);
-
         pickDateButton = (Button) findViewById(R.id.pickDateButton);
 
         if(extras.getString(LottoDetailActivity.EXTRA_NAME).equals("New Lotto Ticket")){
-
+            // do something
         }
+        // set up fields for entering lotto numbers and date
         else {
             b1.setText(lottoName.substring(0,2));
             b2.setText(lottoName.substring(3,5));
@@ -114,7 +120,7 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
             loadBackdrop();
         }
 
-
+        // setup the spinners
         pickStateSpinner = (Spinner) findViewById(R.id.pickStateSpinner);
         pickGameSpinner = (Spinner) findViewById(R.id.pickGameSpinner);
         states = getResources().getStringArray(R.array.lotto_state_array);
@@ -124,14 +130,11 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
         pickGameSpinner.setAdapter(new ArrayAdapter(this, android.R.layout.simple_spinner_item, games));
         pickGameSpinner.setOnItemSelectedListener(new SpinnerItemSelectedListener());
 
-        //lottoTicket = new LottoTicket();
-        //lottoTicket.setUuidString();
-
+        // setup listeners for adding ticket buttons
         saveButton.setOnClickListener(this);
         pickDateButton.setOnClickListener(this);
 
-
-
+        // set up buttons for camera and adding/deleting lotto numbers for any given ticket
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCam);
         fab.setOnClickListener(this);
         //vg = (ViewGroup) findViewById(R.id.linearLayout);
@@ -146,6 +149,10 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
         textView.setText("  ");
         countViews = 0;
     }
+
+    /**
+     * Inner Class for spinners
+     */
     private class SpinnerItemSelectedListener implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view,
@@ -158,13 +165,17 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
             //Toast.makeText(parent.getContext(), "No Item selected" , Toast.LENGTH_SHORT).show();
         }
     }
+
+    /**
+     * onClick is listener for buttons
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
 
             case R.id.saveButton:
                 ParseObject lottoTicket = new ParseObject("test");
-
                 lottoTicket.put("B1", String.format("%02d", Integer.parseInt(b1.getText().toString())));
                 lottoTicket.put("B2", String.format("%02d", Integer.parseInt(b2.getText().toString())));
                 lottoTicket.put("B3", String.format("%02d", Integer.parseInt(b3.getText().toString())));
@@ -218,7 +229,10 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
                 alertDatePicker();
         }
     }
-    //private ImageView imageView;
+
+    /**
+     * loadBackdrop() sets up correct backdrop image for selected tickets
+     */
     private void loadBackdrop() {
         imageView = (ImageView) findViewById(R.id.backdrop);
         Glide.with(this).load(picUrl).fitCenter().into(imageView);
@@ -237,34 +251,42 @@ public class LottoDetailActivity extends AppCompatActivity implements OnClickLis
     }
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-
+    // intent when camera button is pushed
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
+
     private Bitmap imageBitmap;
     private ImageView imageView;
+
+    /**
+     * onActivityResult processes the photo taken
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             imageBitmap = (Bitmap) extras.get("data");
-            //imageView.invalidate();
             imageView = (ImageView) findViewById(R.id.backdrop);
             imageView.setImageBitmap(imageBitmap);
-            //Glide.with(this).load(imageBitmap).centerCrop().into(imageView);
+
         }
     }
-    /*
- * Show AlertDialog with date picker.
- */
+
+ /**
+  * Show AlertDialog with date picker.
+  */
     public void alertDatePicker() {
 
-    /*
-     * Inflate the XML view. activity_main is in res/layout/date_picker.xml
-     */
+      /**
+       * Inflate the XML view. activity_main is in res/layout/date_picker.xml
+       */
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.date_picker, null, false);
 

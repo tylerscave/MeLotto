@@ -2,11 +2,9 @@ package sjsu.cs146.melotto;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentContainer;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -19,15 +17,22 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 
-
+/**
+ * COPYRIGHT (C) 2015 Chris Van Horn, Tyler Jones. All Rights Reserved.
+ * LottoNewListFragment is responsible for fragment showing lotto tickets later than the current
+ * date
+ *
+ * Solves CmpE131-02 MeLotto
+ * @author Chris Van Horn
+ * @author Tyler Jones
+ * @version 1.01 2015/12/14
+ */
 public class LottoNewListFragment extends Fragment {
+    // declare all class variables
     private static List<String> list = new ArrayList<>();
     private static List<ParseFile> pics = new ArrayList<>();
 
@@ -40,12 +45,21 @@ public class LottoNewListFragment extends Fragment {
         return rv;
     }
 
+    /**
+     * setupRecyclerView to set up the list and refresh it as tab is selected
+     * @param recyclerView
+     */
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
                 setNewTickets(LottoTicket.getNewTicketsList())));
     }
 
+    /**
+     * setNewTickets sets the tickets from Parse
+     * @param tickets
+     * @return
+     */
     public static List<String> setNewTickets(List<LottoTicket> tickets){
         list.clear();
         pics.clear();
@@ -56,6 +70,9 @@ public class LottoNewListFragment extends Fragment {
         return list;
     }
 
+    /**
+     * Inner class used to adapt the list for recyclerview
+     */
     public static class SimpleStringRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
 

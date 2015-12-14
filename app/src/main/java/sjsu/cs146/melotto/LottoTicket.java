@@ -1,28 +1,34 @@
 package sjsu.cs146.melotto;
-import android.util.Log;
-import android.widget.Toast;
 
+import android.util.Log;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
-import java.security.Key;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * COPYRIGHT (C) 2015 Chris Van Horn, Tyler Jones. All Rights Reserved.
+ * LottoTicket class defines the lotto ticket object and is responsible for pulling user tickets
+ * from Parse
+ *
+ * Solves CmpE131-02 MeLotto
+ * @author Chris Van Horn
+ * @author Tyler Jones
+ * @version 1.01 2015/12/14
+ */
 public class LottoTicket implements Comparable<LottoTicket>{
+
+    // declare all class variables
     private static HashMap<String, LottoTicket> newTicketsMap = new HashMap<String, LottoTicket>();
     private static HashMap<String, LottoTicket> pastTicketsMap = new HashMap<String, LottoTicket>();
     private int[] nums;
@@ -33,12 +39,24 @@ public class LottoTicket implements Comparable<LottoTicket>{
     private Boolean selected;
     private Boolean winner;
 
+    /**
+     * constructor to pass tickets to fragments as object is created
+     */
     public LottoTicket() {
         setNewTicketsMap();
         setPastTicketsMap();
     }
 
-
+    /**
+     * constructor to set up the lotto ticket object
+     * @param printString
+     * @param nums
+     * @param pb
+     * @param date
+     * @param pic
+     * @param selected
+     * @param winner
+     */
     public LottoTicket(String printString, int[] nums, int pb, int date, ParseFile pic, Boolean selected, Boolean winner) {
         this.printString = printString;
         this.date = date;
@@ -49,6 +67,10 @@ public class LottoTicket implements Comparable<LottoTicket>{
         this.winner = winner;
     }
 
+    /**
+     * togglePrint() handles behavior when check boxes are checked for each ticket
+     * this is used for passing tickets to the printlist fragment
+     */
     public void togglePrint() {
         if (selected)
             this.selected = false;
@@ -56,6 +78,7 @@ public class LottoTicket implements Comparable<LottoTicket>{
             this.selected = true;
     }
 
+    // accessors and mutators for variables in this class
     public Boolean getSelected() {
         return selected;
     }
@@ -84,7 +107,10 @@ public class LottoTicket implements Comparable<LottoTicket>{
         return winner;
     }
 
-
+    /**
+     * getTodaysDate()
+     * @return the current date
+     */
     public static int getTodaysDate() {
         Calendar now = Calendar.getInstance();
         int year = now.get(Calendar.YEAR);
@@ -94,6 +120,9 @@ public class LottoTicket implements Comparable<LottoTicket>{
         return date;
     }
 
+    /**
+     * setNewTicketsMap() gets all info for future tickets from Parse
+     */
     public static void setNewTicketsMap(){
         int date = getTodaysDate();
         List<String> keys = Arrays.asList("B1", "B2", "B3", "B4", "B5", "PB", "DATE", "profilepic");
@@ -143,6 +172,10 @@ public class LottoTicket implements Comparable<LottoTicket>{
         });
     }
 
+    /**
+     * getNewTicketsList() accessor for getting new tickets
+     * @return
+     */
     public static List<LottoTicket> getNewTicketsList() {
         ArrayList<LottoTicket> list = new ArrayList<>();
         for(LottoTicket l:newTicketsMap.values()){
@@ -162,6 +195,9 @@ public class LottoTicket implements Comparable<LottoTicket>{
         return "";
     }
 
+    /**
+     * setPastTicketsMap() gets all info for past tickets from Parse
+     */
     public static void setPastTicketsMap(){
         int date = getTodaysDate();
         List<String> keys = Arrays.asList("B1", "B2", "B3", "B4", "B5", "PB", "DATE", "profilepic", "WINNER");
@@ -236,6 +272,10 @@ public class LottoTicket implements Comparable<LottoTicket>{
             return false;
     }
 
+    /**
+     * getPastTicketsList() accessor for getting past tickets
+     * @return
+     */
     public static List<LottoTicket> getPastTicketsList() {
         List<LottoTicket> list = new LinkedList<>();
         int i=0;
@@ -247,7 +287,10 @@ public class LottoTicket implements Comparable<LottoTicket>{
         return list;
     }
 
-    //this may be used for winning tickets or printing the pdf...
+    /**
+     * getPrintTicketsList() used for winning tickets or printing the pdf...
+     * @return
+     */
     public static List<LottoTicket> getPrintTicketsList() {
         List<LottoTicket> list = new LinkedList<>();
         for(LottoTicket l:newTicketsMap.values()){

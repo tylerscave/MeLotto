@@ -13,12 +13,18 @@ import com.parse.ParseUser;
 import com.parse.ui.ParseLoginBuilder;
 
 /**
- * Shows the user profile. This simple activity can function regardless of whether the user
- * is currently logged in.
+ * COPYRIGHT (C) 2015 Chris Van Horn. All Rights Reserved.
+ * ProfileActivity class Shows the user profile. This simple activity can function regardless of
+ * whether the user is currently logged in.
+ *
+ * Solves CmpE131-02 MeLotto
+ * @author Chris Van Horn
+ * @version 1.01 2015/12/14
  */
 public class ProfileActivity extends Activity {
-    private static final int LOGIN_REQUEST = 0;
 
+    // declare all class variables
+    private static final int LOGIN_REQUEST = 0;
     private TextView titleTextView;
     private TextView emailTextView;
     private TextView nameTextView;

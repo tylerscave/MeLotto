@@ -28,10 +28,18 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * COPYRIGHT (C) 2015 Chris Van Horn, Tyler Jones. All Rights Reserved.
+ * LottoActivity class is the main class for MeLotto. This class sets up the skeleton for the app,
+ * and creates all fragments, menus, and floating action buttons
+ *
+ * Solves CmpE131-02 MeLotto
+ * @author Chris Van Horn
+ * @author Tyler Jones
+ * @version 1.01 2015/12/14
+ */
 public class LottoActivity extends AppCompatActivity {
-
-    //private DrawerLayout mDrawerLayout;
-    //private int backButtonCount;
+    // declare all class variables
     private ViewPager viewPager;
     private Adapter adapter;
 
@@ -50,21 +58,24 @@ public class LottoActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        // Set up the toolbar with menu
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // set up viewpager for tabs/fragments
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
             setupViewPager(viewPager);
         }
 
-
+        // set up floating action buttons for adding tickets and printing a PDF
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch(view.getId()){
                     case R.id.fab:
+                        // add tickets
                         if(viewPager.getCurrentItem()<2){
                             //Toast.makeText(getApplicationContext(),"First",Toast.LENGTH_LONG).show();
                             Context context = view.getContext();
@@ -72,6 +83,7 @@ public class LottoActivity extends AppCompatActivity {
                             intent.putExtra(LottoDetailActivity.EXTRA_NAME, "New Lotto Ticket");
                             context.startActivity(intent);
                         }
+                        // print PDF
                         else if(viewPager.getCurrentItem() == 2){
                             Toast.makeText(getApplicationContext(),"MeLotto.pdf was created for you",
                                     Toast.LENGTH_LONG).show();
@@ -87,12 +99,17 @@ public class LottoActivity extends AppCompatActivity {
             }
         });
 
+        // Listener for switching tabs/fragments
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
 
+            /**
+             * onPageSelected determines which tab you are on to provide correct floating action button
+             * @param position
+             */
             @Override
             public void onPageSelected(int position) {
 
@@ -101,19 +118,14 @@ public class LottoActivity extends AppCompatActivity {
                 }
                 else
                     fab.setImageResource(R.drawable.ic_add);
-                /*if(position==1) {
-                    Toast.makeText(LottoActivity.this,
-                            "Selected page position: " + position, Toast.LENGTH_SHORT).show();
-                    LottoTicket.getPastTicketsList();
-                    adapter.notifyDataSetChanged();
-                    //ViewGroup vg = (ViewGroup) findViewById (R.id.recyclerview);
-                    //vg.invalidate();
-                }*/
             }
 
+            /**
+             * listenes for swiping for tabs
+             * @param state
+             */
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
@@ -150,7 +162,11 @@ public class LottoActivity extends AppCompatActivity {
         return true;
     }
 
-
+    /**
+     * onOptionsItemSelected determines which menu option is selected
+     * @param item
+     * @return true if item selected
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -167,6 +183,10 @@ public class LottoActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * setupViewPager creates the tabs/fragments
+     * @param viewPager
+     */
     private void setupViewPager(ViewPager viewPager) {
         adapter = new Adapter(getSupportFragmentManager());
         adapter.addFragment(new LottoNewListFragment(), "New Tickets");
@@ -175,6 +195,10 @@ public class LottoActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
+    /**
+     * Inner class Adaptor is used to communicate with Fragments
+     * Takes advantage of Adapter pattern (Structural)
+     */
     static class Adapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragments = new ArrayList<>();
         private final List<String> mFragmentTitles = new ArrayList<>();
